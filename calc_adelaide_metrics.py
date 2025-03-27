@@ -122,7 +122,7 @@ rows = []
 # Non-outlier point correspondence from Adelaide RMF datasets.
 for data_pth in Path('AdelaideRMF').glob('*/*.mat'):
     pts = get_good_points(data_pth)
-    src, dst = pts[:, :2], pts[:, 2:]
+    src, dst = np.split(pts, 2, axis=1)
     row = {'dataset': data_pth.stem}
     for tn, tf in transforms.items():
         assert tf.estimate(src, dst)

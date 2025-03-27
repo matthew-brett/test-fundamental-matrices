@@ -36,3 +36,14 @@ For citation of these datasets, see the main page above.  In particular:
 >   year = {2011}
 > }
 > ```
+
+To run the version of scikit-image that I am using:
+
+```
+git clone https://github.com/matthew-brett/scikit-image
+# Currently commit 8cd967682
+git co refactor-fundamental
+```
+
+and then follow the [instructions to install a development
+version](https://scikit-image.org/docs/stable/gitwash/index.html).
