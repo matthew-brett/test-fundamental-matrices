@@ -29,6 +29,7 @@ class FMTMRS(FundamentalMatrixTransform):
 class CV28Point:
     """ Simulate skimage transform using OpenCV
 
+    OpenCV 8-point algorithm (Hartley).
     """
 
     algorithm = cv2.FM_8POINT
@@ -42,6 +43,8 @@ class CV28Point:
 
 
 class CV2LMedS(CV28Point):
+    """ OpenCV LMedS algorithm
+    """
 
     algorithm = cv2.FM_LMEDS
 
@@ -119,7 +122,7 @@ rows = []
 # Non-outlier point correspondence from Adelaide RMF datasets.
 for data_pth in Path('AdelaideRMF').glob('*/*.mat'):
     pts = get_good_points(data_pth)
-    src, dst = np.split(pts, 2, axis=1)
+    src, dst = pts[:, :2], pts[:, 2:]
     row = {'dataset': data_pth.stem}
     for tn, tf in transforms.items():
         assert tf.estimate(src, dst)
@@ -135,7 +138,7 @@ for metric_name in 'mad', 'rmsd':
     for tn in transforms:
         col_names.append(f'{tn}-{metric_name}')
 
-df = pd.DataFrame(rows)[col_names]
+df = pd.DataFrame(rows)[col_names].sort_values('dataset')
 df['mad-mrs-better'] = df['mrs-mad'] < df['rms-mad']
 df['rmsd-mrs-better'] = df['mrs-rmsd'] < df['rms-rmsd']
 df.to_csv('adelaide_rmf_metrics.csv', index=None)
