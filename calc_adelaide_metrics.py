@@ -72,6 +72,12 @@ def calc_distances(src, dst, F, metric='distance'):
         'epi-distances' is the squared sum of distances of points from epipolar
         lines in both images.  See [2]_, section 7.1.4.
 
+    Notes
+    -----
+    See [Wikipedia on point-line
+    distance](https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#A_vector_projection_proof)
+    for standard distance formula, and various proofs.
+
     References
     ----------
     .. [1] Zhang, Zhengyou. "Determining the epipolar geometry and its
@@ -85,7 +91,7 @@ def calc_distances(src, dst, F, metric='distance'):
     Fu = F @ src_h.T
     uFu = np.sum(dst_h.T * Fu, axis=0)
     if metric == 'distance':
-        # See Zhang, p163.
+        # See Zhang, p163, and Notes above.
         return uFu / np.sqrt(np.sum(Fu[:-1]**2, axis=0))
     if metric == 'epip-distances':
         # Hartley, p 585, section 7.1.4
