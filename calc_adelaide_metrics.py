@@ -66,10 +66,10 @@ def calc_distances(src, dst, F, metric='distance'):
         Matching points in second image.
     F : array shape (3, 3)
         Fundamental matrix mapping `src` to epipolar lines in `dst`.
-    metric : {'distance', 'epi-distances'}, optional
+    metric : {'distance', 'epip-distances'}, optional
         Matrix for distance between actual points `dst` and epipolar lines
         generated from `F`.  'distance' is signed distance from [1]_.
-        'epi-distances' is the squared sum of distances of points from epipolar
+        'epip-distances' is the squared sum of distances of points from epipolar
         lines in both images.  See [2]_, section 7.1.4.
 
     Notes
