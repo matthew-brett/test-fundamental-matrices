@@ -124,18 +124,28 @@ def get_good_points(pth):
     return points[np.squeeze(mf['label']) != 0]
 
 
-rows = []
-# Non-outlier point correspondence from Adelaide RMF datasets.
+# Not-outlier point correspondence from Adelaide RMF datasets.
+datasets = {}
 for data_pth in Path('AdelaideRMF').glob('*/*.mat'):
-    pts = get_good_points(data_pth)
-    src, dst = np.split(pts, 2, axis=1)
-    row = {'dataset': data_pth.stem}
+    datasets[data_pth.stem] = get_good_points(data_pth)
+
+pts2sd = lambda pts : np.split(pts, 2, axis=1)
+
+
+def calc_mad_rmsd(src, dst, F):
+    return (np.mean(np.abs(calc_distances(src, dst, F, 'distance'))),
+            np.sqrt(np.mean(calc_distances(src, dst, F, 'epip-distances'))))
+
+# Standard MRS and RMS calculations.
+rows = []
+for name, pts in datasets.items():
+    row = {'dataset': name}
+    src, dst = pts2sd(pts)
     for tn, tf in transforms.items():
         assert tf.estimate(src, dst)
-        dists = calc_distances(src, dst, tf.params, 'distance')
-        row[f'{tn}-mad'] = np.mean(np.abs(dists))
-        epip_dists = calc_distances(src, dst, tf.params, 'epip-distances')
-        row[f'{tn}-rmsd'] = np.sqrt(np.mean(epip_dists))
+        row[f'{tn}-mad'], row[f'{tn}-rmsd'] = calc_mad_rmsd(src,
+                                                            dst,
+                                                            tf.params)
     rows.append(row)
 
 # Reorder columns.
@@ -145,6 +155,25 @@ for metric_name in 'mad', 'rmsd':
         col_names.append(f'{tn}-{metric_name}')
 
 df = pd.DataFrame(rows)[col_names].sort_values('dataset')
-df['mad-mrs-better'] = df['mrs-mad'] < df['rms-mad']
-df['rmsd-mrs-better'] = df['mrs-rmsd'] < df['rms-rmsd']
 df.to_csv('adelaide_rmf_metrics.csv', index=None)
+
+
+# Train test calculations.
+rng = np.random.default_rng()
+rows = []
+for name, pts in datasets.items():
+    row = {'dataset': name}
+    n = len(pts)
+    n2 = n // 2
+    tt = rng.permuted(np.repeat(['train', 'test'], [n2, n - n2]))
+    train_s, train_d = pts2sd(pts[tt == 'train'])
+    test_s, test_d = pts2sd(pts[tt == 'test'])
+    for tn, tf in transforms.items():
+        assert tf.estimate(train_s, train_d)
+        row[f'{tn}-mad'], row[f'{tn}-rmsd'] = calc_mad_rmsd(test_s,
+                                                            test_d,
+                                                            tf.params)
+    rows.append(row)
+
+df = pd.DataFrame(rows)[col_names].sort_values('dataset')
+df.to_csv('adelaide_rmf_tt_metrics.csv', index=None)
