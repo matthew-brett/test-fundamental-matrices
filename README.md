@@ -2,11 +2,11 @@
 
 The home of the Adelaide RMF datasets is
 <https://www.ai4space.group/research/adelaidermf> — but the links there are
-broken (I've emailed the first contact listed on that page).
-
-In the meantime, I found what appear to be the data files at `data/AdelaideRMF` in
-<https://github.com/trungtpham/RCMSA>.  Commit `0d5f3e3` of that repository is
-the source of the `AdelaideRMF` directory here.
+broken. The first contact listed on that page — Hoi Sim Wong - kindly emailed
+me a Dropbox link to the data.  The data almost completely corresponds to
+another copy I found at `data/AdelaideRMF` in
+<https://github.com/trungtpham/RCMSA>, commit `0d5f3e3`, but the copies here
+are the copies fro the Dropbox link from the main author.
 
 In the home page above above, the format of the files is given as:
 

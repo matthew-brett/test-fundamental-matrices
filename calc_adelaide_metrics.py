@@ -11,7 +11,7 @@ import scipy.io as sio
 import pandas as pd
 
 from skimage.transform import FundamentalMatrixTransform
-from skimage.transform._geometric import _as_h
+from skimage.transform._geometric import _append_homogeneous_dim as _as_h
 
 # pip install opencv-python-headless
 import cv2
