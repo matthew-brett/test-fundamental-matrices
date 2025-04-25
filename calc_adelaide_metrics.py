@@ -33,6 +33,13 @@ class FMTRMS2(FundamentalMatrixTransform):
     scaling = 'rms2'
 
 
+class FMTRMSp5(FundamentalMatrixTransform):
+    """ Version of FundamentalMatrixTransform using MRS scaling * 2
+    """
+
+    scaling = 'rmsp5'
+
+
 class CV28Point:
     """ Simulate skimage transform using OpenCV
 
@@ -59,7 +66,7 @@ class CV2LMedS(CV28Point):
 transforms = dict(rms=FundamentalMatrixTransform(),
                   mrs=FMTMRS(),
                   rms2=FMTRMS2(),
-                  cv28=CV28Point())
+                  rmsp5=FMTRMSp5())
 
 
 def calc_distances(src, dst, F, metric='distance'):
