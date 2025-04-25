@@ -16,8 +16,8 @@ $$
 
 What is the nearest perpendicular distance from the line $l$ to point $Q$?
 
-First consider that the 2D line $l$ is on a 3D plane $p$ such that $z = ax + by
-+ c$, where $z$ is the third height co-ordinate.
+First consider that the 2D line $l$ is on a 3D plane $p$ such that
+$z = ax + by + c$, where $z$ is the third height co-ordinate.
 
 $l$ is the intersection of the plane $p$ with the $x, y$ plane where $z=0$.
 
